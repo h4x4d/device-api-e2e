@@ -1,0 +1,2 @@
+PLATFORM = 'IOS'
+USER_ID = '1'
