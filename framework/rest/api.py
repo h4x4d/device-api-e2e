@@ -1,5 +1,5 @@
 import requests
-from framework.models import DeviceResponse
+from framework.rest.models import DeviceResponse
 
 
 class DeviceAPI:
