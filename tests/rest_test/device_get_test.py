@@ -4,7 +4,7 @@ from requests import codes
 from data.device import PLATFORM, USER_ID
 
 
-def test_get_device(device_api, device):
+def test_get_device_rest(device_api, device):
     status_code, device_data = device_api.get_device(device)
 
     assert_that(status_code, equal_to(codes.OK))

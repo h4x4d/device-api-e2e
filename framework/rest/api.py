@@ -30,3 +30,15 @@ class DeviceAPI:
         response = self.session.delete(url)
         device_data = response.json() if response.ok else None
         return response.status_code, device_data
+
+    def update_device(self, device_id: int, platform: str = None, user_id: int = None):
+        url = f"{self.host}/api/v1/devices/{device_id}"
+
+        data = {
+            "platform": platform,
+            "user_id": user_id
+        }
+
+        response = self.session.put(url, json=data)
+
+        return response.status_code, (response.json() if response.ok else None)
