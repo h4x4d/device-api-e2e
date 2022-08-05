@@ -1,15 +1,12 @@
-from hamcrest import assert_that, equal_to
-from requests import codes
-
 from data.device import PLATFORM, USER_ID
+from framework.rest.code_check import code_check
+from framework.fields_check import check_platform, check_user_id
 
 
 def test_get_device_rest(device_api, device):
     status_code, device_data = device_api.get_device(device)
 
-    assert_that(status_code, equal_to(codes.OK))
-    assert_that(
-        device_data.platform, equal_to(PLATFORM),
-        f'Platform is {device_data.platform}',
-    )
-    assert_that(device_data.userId, equal_to(USER_ID))
+    code_check(status_code, "ok")
+
+    check_platform(device_data, PLATFORM)
+    check_user_id(device_data, USER_ID)

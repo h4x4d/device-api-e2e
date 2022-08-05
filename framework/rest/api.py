@@ -18,8 +18,8 @@ class DeviceAPI:
     def create_device(self, platform, user_id):
         url = f'{self.host}/api/v1/devices'
         data = {
-          "platform": platform,
-          "userId": user_id,
+            "platform": platform,
+            "userId": user_id,
         }
         response = self.session.post(url, json=data)
         device_id = response.json().get('deviceId') if response.ok else None
@@ -41,4 +41,6 @@ class DeviceAPI:
 
         response = self.session.put(url, json=data)
 
-        return response.status_code, (response.json() if response.ok else None)
+        device_data = response.json() if response.ok else None
+
+        return response.status_code, device_data

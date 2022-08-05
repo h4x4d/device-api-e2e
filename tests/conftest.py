@@ -1,9 +1,9 @@
 import pytest
 
-from framework.rest.api import DeviceAPI
-from framework.grpc.api import DeviceAPIGRPC
 from config import HOST_REST, HOST_GRPC, TOKEN
 from data.device import PLATFORM, USER_ID
+from framework.grpc.api import DeviceAPIGRPC
+from framework.rest.api import DeviceAPI
 
 
 @pytest.fixture(scope='session')
