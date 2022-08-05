@@ -18,8 +18,8 @@ class DeviceAPI:
     def create_device(self, platform, user_id):
         url = f'{self.host}/api/v1/devices'
         data = {
-          "platform": platform,
-          "userId": user_id,
+            "platform": platform,
+            "userId": user_id,
         }
         response = self.session.post(url, json=data)
         device_id = response.json().get('deviceId') if response.ok else None
@@ -29,4 +29,18 @@ class DeviceAPI:
         url = f'{self.host}/api/v1/devices/{device_id}'
         response = self.session.delete(url)
         device_data = response.json() if response.ok else None
+        return response.status_code, device_data
+
+    def update_device(self, device_id: int, platform: str = None, user_id: int = None):
+        url = f"{self.host}/api/v1/devices/{device_id}"
+
+        data = {
+            "platform": platform,
+            "user_id": user_id
+        }
+
+        response = self.session.put(url, json=data)
+
+        device_data = response.json() if response.ok else None
+
         return response.status_code, device_data
