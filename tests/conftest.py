@@ -1,9 +1,10 @@
 import pytest
 
-from config import HOST_REST, HOST_GRPC, TOKEN
+from config import HOST_REST, HOST_GRPC, TOKEN, DSN_STRING
 from data.device import PLATFORM, USER_ID
 from framework.grpc.api import DeviceAPIGRPC
 from framework.rest.api import DeviceAPI
+from framework.sql.alchemy import Alchemy
 
 
 @pytest.fixture(scope='session')
@@ -14,6 +15,11 @@ def device_api():
 @pytest.fixture(scope='session')
 def device_api_grpc():
     return DeviceAPIGRPC(HOST_GRPC)
+
+
+@pytest.fixture(scope='session')
+def device_api_alchemy():
+    return Alchemy(DSN_STRING)
 
 
 @pytest.fixture(scope='function')
