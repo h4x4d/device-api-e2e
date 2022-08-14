@@ -1,4 +1,6 @@
 # coding: utf-8
+import json
+
 from sqlalchemy import BigInteger, Boolean, Column, DateTime, ForeignKey, Integer, SmallInteger, String, text, Text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
@@ -6,6 +8,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 metadata = Base.metadata
+
+json_serializable = [str, int, bool, dict, list]
 
 
 class Device(Base):
@@ -18,6 +22,9 @@ class Device(Base):
     removed = Column(Boolean, nullable=False, server_default=text("false"))
     created_at = Column(DateTime, nullable=False, server_default=text("now()"))
     updated_at = Column(DateTime, nullable=False, server_default=text("now()"))
+
+    def serialize(self):
+        return json.dumps({c.name: getattr(self, c.name) for c in self.__table__.columns})
 
 
 class DevicesEvent(Base):
@@ -32,3 +39,7 @@ class DevicesEvent(Base):
     updated_at = Column(DateTime, nullable=False, server_default=text("now()"))
 
     device = relationship('Device')
+
+    def serialize(self):
+        return {c.name: getattr(self, c.name) if type(getattr(self, c.name)) in json_serializable else
+        str(getattr(self, c.name)) for c in self.__table__.columns}

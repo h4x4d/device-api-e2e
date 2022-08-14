@@ -1,3 +1,4 @@
+import allure
 import pytest
 
 from config import HOST_REST, HOST_GRPC, TOKEN, DSN_STRING
@@ -7,16 +8,19 @@ from framework.rest.api import DeviceAPI
 from framework.sql.alchemy import Alchemy
 
 
+@allure.step("Creating REST DeviceAPI")
 @pytest.fixture(scope='session')
 def device_api():
     return DeviceAPI(HOST_REST, TOKEN)
 
 
+@allure.step("Creating GRPC DeviceAPI")
 @pytest.fixture(scope='session')
 def device_api_grpc():
     return DeviceAPIGRPC(HOST_GRPC)
 
 
+@allure.step("Creating SQLAlchemy DeviceAPI")
 @pytest.fixture(scope='session')
 def device_api_alchemy():
     return Alchemy(DSN_STRING)
@@ -24,11 +28,13 @@ def device_api_alchemy():
 
 @pytest.fixture(scope='function')
 def device(device_api):
-    _, device_id = device_api.create_device(platform=PLATFORM, user_id=USER_ID)
+    with allure.step("Creating test device"):
+        _, device_id = device_api.create_device(platform=PLATFORM, user_id=USER_ID)
 
-    yield int(device_id)
+        yield int(device_id)
 
-    device_api.delete_device(device_id)
+    with allure.step("Deleting test device"):
+        device_api.delete_device(device_id)
 
 
 @pytest.fixture(scope='function', params=['REST', 'GRPC'])

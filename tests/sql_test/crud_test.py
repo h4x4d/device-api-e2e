@@ -1,44 +1,64 @@
 import requests
 from hamcrest import assert_that, equal_to
+import allure
+
+from framework.rest.code_check import code_check
 
 
+@allure.title("Test check CREATE CRUD")
 def test_crud_create(device_api_alchemy, device):
-    updates = device_api_alchemy.entries_by_id(int(device))
 
-    assert_that(len(updates), equal_to(1))
+    with allure.step("Get CRUD"):
+        updates = device_api_alchemy.entries_by_id(int(device))
 
-    create_update = updates[-1]
-    print(create_update.payload)
-    assert_that(create_update.type, equal_to(1))
+    with allure.step("check CRUD len"):
+        assert_that(len(updates), equal_to(1))
+
+    with allure.step("check CREATE type"):
+        create_update = updates[-1]
+        assert_that(create_update.type, equal_to(1))
 
 
+@allure.title("Test check EDIT CRUD")
 def test_crud_edit(device_api_alchemy, device, device_api):
-    event = device_api_alchemy.first_edit_event()
-    payload = event.payload
+    with allure.step("Get edit event of device"):
+        event = device_api_alchemy.first_edit_event()
+        payload = event.payload
 
-    update = device_api.update_device(device, payload['platform'], payload['user_id'])
-    assert_that(update[0], equal_to(requests.codes['ok']))
+    with allure.step("Update device"):
+        update = device_api.update_device(device, payload['platform'], payload['user_id'])
 
-    updates = device_api_alchemy.entries_by_id(int(device))
+    code_check(update[0], "ok")
 
-    assert_that(len(updates), equal_to(2))
+    with allure.step("Get CRUD"):
+        updates = device_api_alchemy.entries_by_id(int(device))
 
-    new_payload = payload.copy()
-    new_payload['id'] = int(device)
+    with allure.step("Get len of CRUD"):
+        assert_that(len(updates), equal_to(2))
 
-    new_update = updates[-1]
+    with allure.step("Check Payload"):
+        new_payload = payload.copy()
+        new_payload['id'] = int(device)
 
-    assert_that(new_update.type, equal_to(2))
-    assert_that(new_update.payload, equal_to(new_payload))
+        new_update = updates[-1]
+
+        assert_that(new_update.type, equal_to(2))
+        assert_that(new_update.payload, equal_to(new_payload))
 
 
+@allure.title("Test check DELETE CRUD")
 def test_crud_delete(device_api_alchemy, device, device_api):
-    deletion = device_api.delete_device(device)
+    with allure.step("Delete device"):
+        deletion = device_api.delete_device(device)
 
-    assert_that(deletion[0], equal_to(requests.codes['ok']))
+    code_check(deletion[0], "ok")
 
-    updates = device_api_alchemy.entries_by_id(int(device))
-    assert_that(len(updates), equal_to(2))
+    with allure.step("Get CRUD"):
+        updates = device_api_alchemy.entries_by_id(int(device))
 
-    delete_update = updates[-1]
-    assert_that(delete_update.type, equal_to(3))
+    with allure.step("Get len of CRUD"):
+        assert_that(len(updates), equal_to(2))
+
+    with allure.step("Check type of update"):
+        delete_update = updates[-1]
+        assert_that(delete_update.type, equal_to(3))
