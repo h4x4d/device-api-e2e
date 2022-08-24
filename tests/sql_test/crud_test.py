@@ -41,6 +41,8 @@ def test_crud_edit(device_api_alchemy, device, device_api):
         new_payload['id'] = int(device)
 
         new_update = updates[-1]
+        del new_payload['created_at']
+        del new_payload['updated_at']
 
         assert_that(new_update.type, equal_to(2))
         assert_that(new_update.payload, equal_to(new_payload))

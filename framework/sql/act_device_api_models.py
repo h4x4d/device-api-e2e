@@ -41,5 +41,9 @@ class DevicesEvent(Base):
     device = relationship('Device')
 
     def serialize(self):
-        return {c.name: getattr(self, c.name) if type(getattr(self, c.name)) in json_serializable else
-        str(getattr(self, c.name)) for c in self.__table__.columns}
+        serialized = {}
+        for column in self.__table__.columns:
+            c = getattr(self, column.name)
+            serialized[column.name] = c if type(c) in json_serializable else str(c)
+
+        return serialized

@@ -1,10 +1,10 @@
 .PHONY: delete_allure
 delete_allure:
-	rm allure-results -r
+	rm allure-results/* allure-results/.*
 
 
 .PHONY: pytest_run
-pytest_run: delete_allure
+pytest_run:
 	python -m pytest --alluredir=allure-results -s -v
 
 .PHONY: generate
