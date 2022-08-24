@@ -11,7 +11,7 @@ stages:
 
 build:
   stage: build
-  image: gitlab.ozon.dev/qa/classroom-2/students/dependency_proxy/containers/docker:20.10.16
+  image: gitlab.ozon.dev/qa/classroom-3/students/dependency_proxy/containers/docker:20.10.16
   services:
     - docker:20.10.16-dind
   variables:
