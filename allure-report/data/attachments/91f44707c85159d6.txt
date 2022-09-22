@@ -1,0 +1,9 @@
+REQUEST:
+url: http://localhost:8080/api/v1/devices/1355
+data: None
+headers: {'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Basic b3pvbjpyb3V0ZTI1Ng==', 'Content-Length': '0'}
+
+RESPONSE:
+status_code: 200
+data: {"found":true}
+headers: {'Server': 'nginx/1.20.2', 'Date': 'Sun, 14 Aug 2022 18:32:09 GMT', 'Content-Type': 'application/json', 'Content-Length': '14', 'Connection': 'keep-alive', 'Grpc-Metadata-Content-Type': 'application/grpc'}
